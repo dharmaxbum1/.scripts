@@ -9,4 +9,4 @@ pacman -Sc
 pacman-optimize && sync
 updatedb
 
-exit 0
+exit 1
