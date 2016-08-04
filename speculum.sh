@@ -1,10 +1,9 @@
 #!/bin/bash
-
-# by xToNouSou
-# automates (rank and replace) process for Arch Linux systems
+## by xtonousou
+# simple script to automate "oh new mirrorlist, lets rank and replace" process
 
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+  then printf "e[31mPlease run as root\n"
   exit
 fi
 
