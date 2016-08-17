@@ -65,19 +65,6 @@ clear
 
 case $input_selection_ in
 1)
-	if [ -f $PAC_LIST_NEW ]; then
-		printf "${green_color}Uncommenting servers in order to perform speedtest...\n"
-		sed -i 's/^#Server/Server/' $PAC_LIST_NEW
-		printf "${green_color}Started ranking. Please wait...\n"
-		rankmirrors -n 6 $PAC_LIST_NEW
-		printf "${green_color}Done\n"
-		sleep 2
-		clean_up 1
-	else
-		error_exit "$PAC_LIST_NEW does not exist!\n"
-	fi
-	;;
-2)
 	if [ -f $PAC_LIST_ ]; then
 		printf "${green_color}Copying current mirrorlist...\n"
 		cp $PAC_LIST_ $PAC_LIST_OLD
@@ -90,6 +77,19 @@ case $input_selection_ in
 		clean_up 1
 	else
 		error_exit "$PAC_LIST_ does not exist!\n"
+	fi
+	;;
+2)
+	if [ -f $PAC_LIST_NEW ]; then
+		printf "${green_color}Uncommenting servers in order to perform speedtest...\n"
+		sed -i 's/^#Server/Server/' $PAC_LIST_NEW
+		printf "${green_color}Started ranking. Please wait...\n"
+		rankmirrors -n 6 $PAC_LIST_NEW
+		printf "${green_color}Done\n"
+		sleep 2
+		clean_up 1
+	else
+		error_exit "$PAC_LIST_NEW does not exist!\n"
 	fi
 	;;
 3)
