@@ -11,6 +11,19 @@ red_color="\033[1;31m"
 cyan_color="\033[1;36m"
 normal_color="\e[1;0m"
 
+function print_intro() {
+	
+	clear
+	echo -e ${green_color}"  _________                          .__                  "
+	sleep 0.15 && echo -e " /   _____/_____   ____   ____  __ __|  |  __ __  _____   "
+	sleep 0.15 && echo -e " \_____   \\____ \_/ __ \_/ ___\|  |  \  | |  |  \/     \ "
+	sleep 0.15 && echo -e " /        \  |_> >  ___/\  \___|  |  /  |_|  |  /  Y Y  \\"
+	sleep 0.15 && echo -e "/_______  /   __/ \___  >\___  >____/|____/____/|__|_|  / "
+	sleep 0.15 && echo -e "        \/|__|        \/     \/                       \/  "${normal_color}
+	echo
+	sleep 1.25
+}
+
 function clean_up {
 
 	# Perform program exit housekeeping
@@ -33,11 +46,13 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+print_intro
+
 clear
-printf "${cyan_color}#################### ${green_color}Speculum ${cyan_color}####################\n"
+printf "${cyan_color}###################### ${green_color}Menu ${cyan_color}######################\n"
 printf "#                                                #\n"
-printf "#${green_color} [1] ${normal_color}Speedtest new mirrorlist and replace.      ${cyan_color}#\n"
-printf "#${green_color} [2] ${normal_color}Speedtest existing mirrorlist and replace. ${cyan_color}#\n"
+printf "#${green_color} [1] ${normal_color}Speedtest existing mirrorlist and replace. ${cyan_color}#\n"
+printf "#${green_color} [2] ${normal_color}Speedtest new mirrorlist and replace.      ${cyan_color}#\n"
 printf "#${green_color} [3] ${normal_color}Update mirrorlist.                         ${cyan_color}#\n"
 printf "#${green_color} [4] ${normal_color}Exit.                                      ${cyan_color}#\n"
 printf "#                                                #\n"
