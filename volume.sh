@@ -1,14 +1,13 @@
 #!/bin/bash
-## interact volume with dunst notifications
-## dependencies: dunstify, dunst, ponymix, sed, awk, tr, cat
+# depends on ponymix, alsamixer, dunst and dunstify
 ismuted=$(cat $HOME/.config/dunst/.dunst_mute)
 if [ "$1" == "low" ]
 then
- ponymix decrease 3
+ ponymix decrease 2
  TEXT=$(ponymix get-volume)
 elif [ "$1" == "high" ]
 then
- ponymix increase 3
+ ponymix increase 2
  TEXT=$(ponymix get-volume)
 elif [ "$1" == "mute" ]
 then
