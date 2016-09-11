@@ -15,7 +15,7 @@ NORMAL="\e[1;0m"
 # Command Vars
 HTTP_CODE=`curl -Is $HOSTS | head -1 | awk {'print $2'}`
 BACKUP_OLD_HOSTS=`cp /etc/hosts /etc/hosts.old 2> /dev/null`
-REMOVE_OLD_HOSTS=`rm -f /etc/hosts`
+REMOVE_OLD_HOSTS=`rm -f /etc/hosts 2> /dev/null`
 GET_HOSTS=`wget -q $HOSTS -P $PATH_TO_HOSTS 2> /dev/null`
 
 function main() {
