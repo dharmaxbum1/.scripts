@@ -8,12 +8,12 @@ HOSTS='https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts'
 PATH_TO_HOSTS='/tmp'
 
 # Colors vars
-GREEN='\033[1;32m'
-RED='\033[1;31m'
-NORMAL='\e[1;0m'
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+NORMAL="\e[1;0m"
 
 # Command Vars
-GET_HTTP_CODE=`curl -Is https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts | head -1 | awk {'print $2'}`
+GET_HTTP_CODE=`curl -Is $HOSTS | head -1 | awk {'print $2'}`
 GET_HOSTS=`wget -q $HOSTS -P $PATH_TO_HOSTS 2> /dev/null`
 MAKE_HOSTS=`touch /etc/hosts 2> /dev/null`
 BACKUP_OLD_HOSTS=`cp /etc/hosts /etc/hosts.old 2> /dev/null`
@@ -26,9 +26,9 @@ function main() {
          ${BACKUP_OLD_HOSTS}
          ${GET_HOSTS}
          ${UPDATE_HOSTS}
-         printf '${GREEN}Done${NORMAL}\n'
+         echo -e "$GREEN \bDone$NORMAL"
       else
-         printf '${RED}Source unreachable${NORMAL}\n'
+         echo -e "$RED \bSource unreachable$NORMAL"
       fi
    else
       if [ "${GET_HTTP_CODE}" = "200" ]; then
@@ -36,8 +36,9 @@ function main() {
          ${BACKUP_OLD_HOSTS}
          ${GET_HOSTS}
          ${UPDATE_HOSTS}
+         echo -e "$GREEN \bDone$NORMAL"
       else
-         printf '${RED}Source unreachable${NORMAL}\n'
+         echo -e "$RED \bSource unreachable$NORMAL"
       fi
    fi
 }
@@ -45,7 +46,7 @@ function main() {
 function check_su() {
 
    if [ "$EUID" -ne 0 ];
-      then printf "${RED}You cannot perform this operation unless you are root.\n"
+      then echo -e "$RED \bYou cannot perform this operation unless you are root.$NORMAL"
       exit
    fi
 }
