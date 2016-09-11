@@ -1,7 +1,6 @@
 #!/bin/bash
 ## by xtonousou
-## simple script to automate xrandr process
-## at lightdm startup
+## simple script to automate xrandr usage
 
 # Commands used
 DUALCHECK=`/bin/xrandr --current | /bin/grep HDMI1\ c`
