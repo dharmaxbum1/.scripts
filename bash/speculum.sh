@@ -97,12 +97,86 @@ function run_monk() {
    updatedb
 }
 
+function _spinner() {
+
+   # $1 start/stop
+   #
+   # on start: $2 display message
+   # on stop : $2 process exit status
+   #           $3 spinner function pid (supplied from stop_spinner)
+    
+   case $1 in
+   start)
+      # calculate the column where spinner and status msg will be displayed
+      let column=$(tput cols)-${#2}-8
+      # display message and position the cursor in $column column
+      echo -ne ${2}
+      printf "%${column}s"
+      # start spinner
+      i=1
+      sp='\|/-'
+      delay=${SPINNER_DELAY:-0.15}
+      while :
+      do
+         printf "\b${sp:i++%${#sp}:1}"
+         sleep $delay
+      done
+      ;;
+   stop)
+      if [[ -z ${3} ]]; then
+         echo "spinner is not running.."
+         exit 1
+      fi
+
+      kill $3 > /dev/null 2>&1
+
+      # inform the user uppon success or failure
+      echo -en "\b["
+      if [[ $2 -eq 0 ]]; then
+         echo -en "${green_color}DONE"
+      else
+         echo -en "${red_color}FAIL"
+      fi
+      echo -e "]"
+      ;;
+   *)
+      echo "invalid argument, try {start/stop}"
+      exit 1
+      ;;
+   esac
+}
+
+function start_spinner {
+	
+   # $1 : msg to display
+   _spinner "start" "${1}" &
+   # set global spinner pid
+   _sp_pid=$!
+   disown
+}
+
+function stop_spinner {
+	
+   # $1 : command exit status
+   _spinner "stop" $1 $_sp_pid
+   unset _sp_pid
+}
+
+function check_su {
+
+   if [ "$EUID" -ne 0 ]; then
+      echo -e "${red_color}Please run as root"
+      exit
+   fi
+}
+
 function clean_up {
 
    # Perform program exit housekeeping
    # Optionally accepts an exit status
    rm -f $PAC_LIST_OLD
    rm -f $PAC_LIST_NEW
+   sleep 2
    clear
    exit $1
 }
@@ -110,15 +184,11 @@ function clean_up {
 function error_exit {
 
    # Display error message and exit
-   printf "${red_color}${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
+   printf "${red_color}${1:-"Unknown Error"}" 1>&2
    clean_up 1
 }
 
-if [ "$EUID" -ne 0 ];
-   then echo -e "${red_color}Please run as root"
-   exit
-fi
-
+check_su
 print_intro
 print_main_menu
 read input_selection_
@@ -133,9 +203,10 @@ case $input_selection_ in
       printf "${green_color}Uncommenting servers in order to rank them...\n"
       sed -i 's/^#Server/Server/' $PAC_LIST_OLD
       printf "${green_color}Started ranking. Please wait...\n"
-      rankmirrors -n $mirrors_number $PAC_LIST_OLD > $PAC_LIST_
-      printf "${green_color}Done\n"
+      start_spinner
       sleep 2
+      rankmirrors -n $mirrors_number $PAC_LIST_OLD > $PAC_LIST_ > /dev/null 2>&1
+      stop_spinner $?
       clean_up 1
    else
       error_exit "$PAC_LIST_ does not exist!\n"
@@ -147,9 +218,10 @@ case $input_selection_ in
       printf "${green_color}Uncommenting servers in order to rank them...\n"
       sed -i 's/^#Server/Server/' $PAC_LIST_NEW
       printf "${green_color}Started ranking. Please wait...\n"
-      rankmirrors -n $mirrors_number $PAC_LIST_NEW
-      printf "${green_color}Done\n"
+      start_spinner
       sleep 2
+      rankmirrors -n $mirrors_number $PAC_LIST_NEW > /dev/null 2>&1
+      stop_spinner $?
       clean_up 1
    else
       error_exit "$PAC_LIST_NEW does not exist!\n"
@@ -165,9 +237,10 @@ case $input_selection_ in
       printf "${green_color}Uncommenting servers in order to rank them...\n"
       sed -i 's/^#Server/Server/' $PAC_LIST_NEW
       printf "${green_color}Started ranking. Please wait...\n"
-      rankmirrors -n $mirrors_number $PAC_LIST_NEW > $PAC_LIST_
-      printf "${green_color}Done\n"
+      start_spinner
       sleep 2
+      rankmirrors -n $mirrors_number $PAC_LIST_NEW > $PAC_LIST_ > /dev/null 2>&1
+      stop_spinner $?
       clean_up 1
       ;;
    2)
@@ -176,9 +249,10 @@ case $input_selection_ in
 	  printf "${green_color}Uncommenting servers in order to rank them...\n"
 	  sed -i 's/^#Server/Server/' $PAC_LIST_NEW
 	  printf "${green_color}Started ranking. Please wait...\n"
-	  rankmirrors -n $mirrors_number $PAC_LIST_NEW > $PAC_LIST_
-	  printf "${green_color}Done\n"
-	  sleep 2
+	  start_spinner
+      sleep 2
+	  rankmirrors -n $mirrors_number $PAC_LIST_NEW > $PAC_LIST_ > /dev/null 2>&1
+	  stop_spinner $?
 	  clean_up 1
 	  ;;
    3)
