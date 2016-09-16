@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+# Depends on tweepy.
+# To install tweepy: pacman -S python-pip; pip install tweepy;
 
 import tweepy
 
