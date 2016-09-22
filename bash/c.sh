@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# compile with ease
 
 # max cachesize in kilobytes (default=5MB)
 [[ -z "$C_CACHE_SIZE" ]] && C_CACHE_SIZE=$((5*1024))
