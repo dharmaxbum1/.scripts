@@ -16,11 +16,10 @@ notify () {
     bar="${fchars:0:f}${echars:0:e} $percent%"
 
     ID=$(cat $HOME/.config/dunst/.dunst_volume)
-    if [ $ID -gt "0" ]
-    then
-        dunstify -p -r $ID "$title\n$bar" > $HOME/.config/dunst/.dunst_volume
+    if [[ "${ID}" -gt 0 ]]; then
+      dunstify -p -r $ID "$title\n$bar" > $HOME/.config/dunst/.dunst_volume
     else
-        dunstify -p "$title\n$bar" > $HOME/.config/dunst/.dunst_volume
+      dunstify -p "$title\n$bar" > $HOME/.config/dunst/.dunst_volume
     fi
 }
 
@@ -29,16 +28,16 @@ exec > /dev/null
 
 case "$1" in
     up)
-        ponymix increase 2%
-        ponymix unmute
-        ;;
+      ponymix increase 2%
+      ponymix unmute
+    ;;
     down)
-        ponymix decrease 2%
-        ponymix unmute
-        ;;
+      ponymix decrease 2%
+      ponymix unmute
+    ;;
     toggle)
-        ponymix toggle
-        ;;
+      ponymix toggle
+    ;;
 esac
 
 notify
