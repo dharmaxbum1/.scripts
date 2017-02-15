@@ -4,10 +4,6 @@ TV="HDMI1"
 LAPTOP="eDP1"
 _1080_="1920x1080"
 
-if [[ -z "$1" ]]; then
-  show_usage
-fi
-
 function show_usage() {
   
   echo "torimon tv"
@@ -46,5 +42,9 @@ function __init__() {
   
   exit
 }
+
+if [[ -z "$1" ]]; then
+  show_usage
+fi
 
 __init__ "$1"
