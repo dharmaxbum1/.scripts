@@ -1,0 +1,5 @@
+systemctl start tor
+systemctl restart tor # new ip
+torsocks curl ipinfo.io/ip # see ip
+echo -e 'AUTHENTICATE "PASSWORD_HERE"\r\nsignal NEWNYM\r\nQUIT' | nc 127.0.0.1 PORT_HERE
+torsocks on # torify current shell
